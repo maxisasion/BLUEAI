@@ -464,44 +464,6 @@
                 box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
             }
         }
-        
-        /* Fibonacci Levels Display */
-        .fibonacci-levels {
-            margin-top: 15px;
-            background: rgba(0, 0, 0, 0.05);
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid rgba(0, 128, 0, 0.2);
-        }
-        
-        .fibonacci-levels h4 {
-            text-align: center;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-        
-        .fibonacci-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-        
-        .fibonacci-level {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px;
-            background: rgba(0, 128, 0, 0.1);
-            border-radius: 3px;
-            font-size: 12px;
-        }
-        
-        .fibonacci-label {
-            font-weight: bold;
-        }
-        
-        .fibonacci-value {
-            color: var(--secondary-color);
-        }
     </style>
 </head>
 <body>
@@ -653,41 +615,6 @@
                                 <div class="detail-value" id="stop-loss">-</div>
                             </div>
                         </div>
-                        
-                        <!-- Fibonacci Levels Display -->
-                        <div id="fibonacci-levels" class="fibonacci-levels hidden">
-                            <h4>FIBONACCI RETRACEMENT LEVELS</h4>
-                            <div class="fibonacci-grid">
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">0.0%</span>
-                                    <span class="fibonacci-value" id="fib-level-0">-</span>
-                                </div>
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">23.6%</span>
-                                    <span class="fibonacci-value" id="fib-level-236">-</span>
-                                </div>
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">38.2%</span>
-                                    <span class="fibonacci-value" id="fib-level-382">-</span>
-                                </div>
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">50.0%</span>
-                                    <span class="fibonacci-value" id="fib-level-500">-</span>
-                                </div>
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">61.8%</span>
-                                    <span class="fibonacci-value" id="fib-level-618">-</span>
-                                </div>
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">78.6%</span>
-                                    <span class="fibonacci-value" id="fib-level-786">-</span>
-                                </div>
-                                <div class="fibonacci-level">
-                                    <span class="fibonacci-label">100.0%</span>
-                                    <span class="fibonacci-value" id="fib-level-100">-</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="chart-container">
@@ -776,7 +703,7 @@
     <script>
         // Configuration
         const config = {
-            apiKey: "e7c2b5ddb0e84c11b3d26a612dd057a6", // Updated API key as requested
+            apiKey: "e7c2b5ddb0e84c11b3d26a612dd057aб", // Updated API key as requested
             pipValues: {
                 "EUR/USD": 0.0001,
                 "GBP/USD": 0.0001,
@@ -880,16 +807,7 @@
             updateTradingStyleBtn: document.getElementById("updateTradingStyleBtn"),
             // WhatsApp elements
             whatsappCall: document.getElementById("whatsappCall"),
-            whatsappMessage: document.getElementById("whatsappMessage"),
-            // Fibonacci elements
-            fibonacciLevels: document.getElementById("fibonacci-levels"),
-            fibLevel0: document.getElementById("fib-level-0"),
-            fibLevel236: document.getElementById("fib-level-236"),
-            fibLevel382: document.getElementById("fib-level-382"),
-            fibLevel500: document.getElementById("fib-level-500"),
-            fibLevel618: document.getElementById("fib-level-618"),
-            fibLevel786: document.getElementById("fib-level-786"),
-            fibLevel100: document.getElementById("fib-level-100")
+            whatsappMessage: document.getElementById("whatsappMessage")
         };
 
         // Initialize the app
@@ -1530,7 +1448,6 @@
                 entry: entry,
                 tp: tp,
                 sl: sl,
-                fibonacciLevels: analysis.fibonacciLevels,
                 timestamp: new Date()
             };
             
@@ -1563,24 +1480,6 @@
             elements.entryPrice.textContent = signal.entry;
             elements.takeProfit.textContent = signal.tp;
             elements.stopLoss.textContent = signal.sl;
-            
-            // Display Fibonacci levels if available
-            if (signal.fibonacciLevels) {
-                elements.fibonacciLevels.classList.remove("hidden");
-                
-                // For Bitcoin and Gold, adjust decimal places
-                const decimalPlaces = signal.pair === "BTC/USD" ? 2 : (signal.pair === "XAU/USD" ? 2 : 5);
-                
-                elements.fibLevel0.textContent = parseFloat(signal.fibonacciLevels.level0).toFixed(decimalPlaces);
-                elements.fibLevel236.textContent = parseFloat(signal.fibonacciLevels.level236).toFixed(decimalPlaces);
-                elements.fibLevel382.textContent = parseFloat(signal.fibonacciLevels.level382).toFixed(decimalPlaces);
-                elements.fibLevel500.textContent = parseFloat(signal.fibonacciLevels.level500).toFixed(decimalPlaces);
-                elements.fibLevel618.textContent = parseFloat(signal.fibonacciLevels.level618).toFixed(decimalPlaces);
-                elements.fibLevel786.textContent = parseFloat(signal.fibonacciLevels.level786).toFixed(decimalPlaces);
-                elements.fibLevel100.textContent = parseFloat(signal.fibonacciLevels.level100).toFixed(decimalPlaces);
-            } else {
-                elements.fibonacciLevels.classList.add("hidden");
-            }
         }
         
         // Show error message
