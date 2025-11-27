@@ -15,7 +15,6 @@
             --light-color: #f0f0f0;
             --gold: #FFD700;
             --bitcoin: #F7931A;
-            --whatsapp: #25D366;
         }
         
         * {
@@ -417,53 +416,6 @@
         .overlay.active {
             display: block;
         }
-        
-        /* WhatsApp Icons */
-        .whatsapp-icons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1001;
-        }
-        
-        .whatsapp-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--whatsapp);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            animation: pulse 2s infinite;
-        }
-        
-        .whatsapp-icon:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-        }
-        
-        .whatsapp-icon i {
-            color: white;
-            font-size: 28px;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-            }
-        }
     </style>
 </head>
 <body>
@@ -641,16 +593,6 @@
         </div>
     </div>
 
-    <!-- WhatsApp Icons -->
-    <div class="whatsapp-icons">
-        <div class="whatsapp-icon" id="whatsappCall">
-            <i class="fas fa-phone"></i>
-        </div>
-        <div class="whatsapp-icon" id="whatsappMessage">
-            <i class="fab fa-whatsapp"></i>
-        </div>
-    </div>
-
     <!-- Hamburger Menu -->
     <div class="side-menu" id="sideMenu">
         <div class="side-menu-header">
@@ -703,7 +645,7 @@
     <script>
         // Configuration
         const config = {
-            apiKey: "e7c2b5ddb0e84c11b3d26a612dd057a6", // Updated API key as requested
+            apiKey: "e7c2b5ddb0e84c11b3d26a612dd057aб", // Updated API key as requested
             pipValues: {
                 "EUR/USD": 0.0001,
                 "GBP/USD": 0.0001,
@@ -731,8 +673,7 @@
                     timeframe: "240"
                 }
             },
-            activationCodes: ["FXBULLS$:90", "TRADe@6", "PROFX@:;", "BULLSsex", "ACTIVATE02"],
-            whatsappNumber: "27672771746" // WhatsApp number for contact
+            activationCodes: ["FXBULLS$:90", "TRADe@6", "PROFX@:;", "BULLSsex", "ACTIVATE02"]
         };
 
         // Generate 1000 unique license keys
@@ -804,10 +745,7 @@
             menuLicenseKey: document.getElementById("menuLicenseKey"),
             menuTradingStyle: document.getElementById("menuTradingStyle"),
             menuTradingStyleSelect: document.getElementById("menuTradingStyleSelect"),
-            updateTradingStyleBtn: document.getElementById("updateTradingStyleBtn"),
-            // WhatsApp elements
-            whatsappCall: document.getElementById("whatsappCall"),
-            whatsappMessage: document.getElementById("whatsappMessage")
+            updateTradingStyleBtn: document.getElementById("updateTradingStyleBtn")
         };
 
         // Initialize the app
@@ -827,10 +765,6 @@
             elements.closeMenu.addEventListener("click", closeSideMenu);
             elements.overlay.addEventListener("click", closeSideMenu);
             elements.updateTradingStyleBtn.addEventListener("click", updateTradingStyle);
-            
-            // WhatsApp event listeners
-            elements.whatsappCall.addEventListener("click", initiateWhatsAppCall);
-            elements.whatsappMessage.addEventListener("click", initiateWhatsAppMessage);
             
             // Check if already logged in
             if (localStorage.getItem("loggedIn") === "true") {
@@ -1170,14 +1104,13 @@
         
         // Calculate Fibonacci Retracement Levels
         function calculateFibonacciLevels(high, low) {
-            const diff = high - low;
             return {
                 level0: high,
-                level236: high - (diff * 0.236),
-                level382: high - (diff * 0.382),
-                level500: high - (diff * 0.5),
-                level618: high - (diff * 0.618),
-                level786: high - (diff * 0.786),
+                level236: high - ((high - low) * 0.236),
+                level382: high - ((high - low) * 0.382),
+                level500: high - ((high - low) * 0.5),
+                level618: high - ((high - low) * 0.618),
+                level786: high - ((high - low) * 0.786),
                 level100: low
             };
         }
@@ -1296,8 +1229,7 @@
                     volatility: volatility,
                     rsi: rsi,
                     trend: currentPrice > ema200 ? "up" : "down",
-                    confidence: Math.abs(confidence),
-                    fibonacciLevels: fibLevels
+                    confidence: Math.abs(confidence)
                 };
             } catch (error) {
                 console.error("Error in market analysis:", error);
@@ -1356,18 +1288,12 @@
                 direction = direction === "BUY" ? "SELL" : "BUY";
             }
             
-            // Calculate Fibonacci levels based on recent high/low approximation
-            const recentHigh = currentPrice * (1 + (Math.random() * 0.05 + 0.02)); // 2-7% above current
-            const recentLow = currentPrice * (1 - (Math.random() * 0.05 + 0.02)); // 2-7% below current
-            const fibLevels = calculateFibonacciLevels(recentHigh, recentLow);
-            
             return {
                 direction: direction,
                 volatility: pairFactor.volatility,
                 rsi: 50,
                 trend: direction === "BUY" ? "up" : "down",
-                confidence: Math.abs(totalScore),
-                fibonacciLevels: fibLevels
+                confidence: Math.abs(totalScore)
             };
         }
         
@@ -1567,20 +1493,6 @@
             
             // Close the menu
             closeSideMenu();
-        }
-        
-        // WhatsApp Functions
-        function initiateWhatsAppCall() {
-            const phoneNumber = config.whatsappNumber;
-            const whatsappUrl = `https://wa.me/${phoneNumber}`;
-            window.open(whatsappUrl, '_blank');
-        }
-        
-        function initiateWhatsAppMessage() {
-            const phoneNumber = config.whatsappNumber;
-            const message = "Hello, I'm interested in FX Bulls PRO signals. Please provide more information.";
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
         }
         
         // Initialize the app when DOM is loaded
