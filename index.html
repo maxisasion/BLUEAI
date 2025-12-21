@@ -55,6 +55,7 @@
             text-align: center;
             text-shadow: 0 0 5px #ffffff;
             border-bottom: 1px solid #008000;
+            position: relative;
         }
         
         .card-body {
@@ -313,12 +314,333 @@
             text-align: center;
             border: 1px solid rgba(0, 128, 0, 0.2);
         }
+        
+        /* NEW: Hamburger Menu Styles */
+        .hamburger-menu {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        .hamburger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            display: none;
+        }
+        
+        .menu-content {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background-color: var(--dark-color);
+            color: white;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .menu-content.active {
+            left: 0;
+        }
+        
+        .menu-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--primary-color);
+        }
+        
+        .menu-header h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .menu-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 128, 0, 0.1);
+            border-radius: 5px;
+            border: 1px solid rgba(0, 128, 0, 0.3);
+        }
+        
+        .menu-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        
+        .user-detail {
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .user-detail strong {
+            color: var(--primary-color);
+        }
+        
+        .signal-history-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .session-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .session-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .session-dot.active {
+            background-color: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        
+        .session-dot.inactive {
+            background-color: #ff0000;
+        }
+        
+        .confidence-meter {
+            height: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* NEW: Trading Style Change Button Styles */
+        .change-style-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 3px #ffffff;
+            border: 1px solid #008000;
+        }
+        
+        .change-style-btn:hover {
+            background: var(--secondary-color);
+            box-shadow: 0 0 8px #008000;
+        }
+        
+        .style-options {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        
+        .style-options.active {
+            display: block;
+        }
+        
+        .style-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .style-option:hover {
+            background: rgba(0, 128, 0, 0.3);
+        }
+        
+        .style-option.active {
+            background: var(--primary-color);
+            border-left: 3px solid #00ff00;
+        }
+        
+        .style-option input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .style-option label {
+            margin: 0;
+            font-size: 11px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <!-- Hamburger Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    
+    <!-- Hamburger Menu Content -->
+    <div class="menu-content" id="menuContent">
+        <div class="close-menu" id="closeMenu">&times;</div>
+        
+        <div class="menu-header">
+            <h3>FX BULLS PRO</h3>
+            <div style="font-size: 12px; color: #ccc;">TRADING DASHBOARD</div>
+        </div>
+        
+        <!-- User Details Section -->
+        <div class="menu-section">
+            <h4>USER DETAILS</h4>
+            <div class="user-detail">
+                <strong>Name:</strong> <span id="menuUserName">Not logged in</span>
+            </div>
+            <div class="user-detail">
+                <strong>Email:</strong> <span id="menuUserEmail">-</span>
+            </div>
+            <div class="user-detail">
+                <strong>Trading Style:</strong> <span id="menuTradingStyle">-</span>
+            </div>
+            <div class="user-detail">
+                <strong>Member Since:</strong> <span id="menuMemberSince">-</span>
+            </div>
+            
+            <!-- NEW: Trading Style Change Button -->
+            <button class="change-style-btn" id="changeStyleBtn">
+                <i class="fas fa-exchange-alt" style="margin-right: 5px;"></i> CHANGE TRADING STYLE
+            </button>
+            
+            <!-- Trading Style Options -->
+            <div class="style-options" id="styleOptions">
+                <div class="style-option" data-style="scalping">
+                    <input type="radio" id="styleScalping" name="tradingStyle" value="scalping">
+                    <label for="styleScalping">Scalping (1-15 min timeframe)</label>
+                </div>
+                <div class="style-option" data-style="day">
+                    <input type="radio" id="styleDay" name="tradingStyle" value="day">
+                    <label for="styleDay">Day Trading (1-4 hour timeframe)</label>
+                </div>
+                <div class="style-option" data-style="swing">
+                    <input type="radio" id="styleSwing" name="tradingStyle" value="swing">
+                    <label for="styleSwing">Swing Trading (4 hour-daily timeframe)</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trading Session Section -->
+        <div class="menu-section">
+            <h4>TRADING SESSION</h4>
+            <div class="session-indicator">
+                <div style="display: flex; align-items: center;">
+                    <div class="session-dot" id="sessionDot"></div>
+                    <span id="sessionStatus">Checking...</span>
+                </div>
+                <div id="sessionTime" style="font-size: 11px;">--:--</div>
+            </div>
+            <div class="user-detail">
+                <strong>Current Session:</strong> <span id="currentSession">-</span>
+            </div>
+            <div class="user-detail">
+                <strong>Session Type:</strong> <span id="sessionType">-</span>
+            </div>
+            <div class="user-detail">
+                <strong>Volatility:</strong> <span id="sessionVolatility">-</span>
+            </div>
+        </div>
+        
+        <!-- Signal Confidence Section -->
+        <div class="menu-section">
+            <h4>SIGNAL CONFIDENCE</h4>
+            <div class="user-detail">
+                <strong>Current Signal:</strong> <span id="menuCurrentSignal">-</span>
+            </div>
+            <div class="user-detail">
+                <strong>Confidence Level:</strong> <span id="confidenceLevel">-</span>
+            </div>
+            <div class="confidence-meter">
+                <div class="confidence-fill" id="confidenceFill" style="width: 0%"></div>
+            </div>
+            <div class="user-detail">
+                <strong>Analysis:</strong> <span id="signalAnalysis">-</span>
+            </div>
+        </div>
+        
+        <!-- Signal History Section -->
+        <div class="menu-section">
+            <h4>SIGNAL HISTORY</h4>
+            <div id="signalHistoryList" style="max-height: 200px; overflow-y: auto;">
+                <div class="signal-history-item">
+                    <div>No signals yet</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Footer -->
+        <div style="text-align: center; margin-top: 20px; font-size: 10px; color: #888;">
+            <div>FX Bulls PRO v2.1</div>
+            <div>© 2024 All rights reserved</div>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="card">
             <div class="card-header">
+                <!-- Hamburger Menu Button -->
+                <div class="hamburger-menu" id="hamburgerMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <h2>FX BULLS PRO</h2>
             </div>
             <div class="card-body">
@@ -543,8 +865,12 @@
         // User database (in a real app, this would be server-side)
         const userDatabase = {};
 
+        // Signal history storage
+        let signalHistory = [];
+
         // DOM Elements
         const elements = {
+            // Existing elements
             loginContainer: document.getElementById("login-container"),
             loginForm: document.getElementById("login-form"),
             registerForm: document.getElementById("register-form"),
@@ -578,7 +904,37 @@
             regName: document.getElementById("regName"),
             regEmail: document.getElementById("regEmail"),
             regPassword: document.getElementById("regPassword"),
-            regConfirmPassword: document.getElementById("regConfirmPassword")
+            regConfirmPassword: document.getElementById("regConfirmPassword"),
+            
+            // Hamburger menu elements
+            hamburgerMenu: document.getElementById("hamburgerMenu"),
+            menuOverlay: document.getElementById("menuOverlay"),
+            menuContent: document.getElementById("menuContent"),
+            closeMenu: document.getElementById("closeMenu"),
+            
+            // Menu content elements
+            menuUserName: document.getElementById("menuUserName"),
+            menuUserEmail: document.getElementById("menuUserEmail"),
+            menuTradingStyle: document.getElementById("menuTradingStyle"),
+            menuMemberSince: document.getElementById("menuMemberSince"),
+            sessionDot: document.getElementById("sessionDot"),
+            sessionStatus: document.getElementById("sessionStatus"),
+            sessionTime: document.getElementById("sessionTime"),
+            currentSession: document.getElementById("currentSession"),
+            sessionType: document.getElementById("sessionType"),
+            sessionVolatility: document.getElementById("sessionVolatility"),
+            menuCurrentSignal: document.getElementById("menuCurrentSignal"),
+            confidenceLevel: document.getElementById("confidenceLevel"),
+            confidenceFill: document.getElementById("confidenceFill"),
+            signalAnalysis: document.getElementById("signalAnalysis"),
+            signalHistoryList: document.getElementById("signalHistoryList"),
+            
+            // NEW: Trading style change elements
+            changeStyleBtn: document.getElementById("changeStyleBtn"),
+            styleOptions: document.getElementById("styleOptions"),
+            styleScalping: document.getElementById("styleScalping"),
+            styleDay: document.getElementById("styleDay"),
+            styleSwing: document.getElementById("styleSwing")
         };
 
         // Initialize the app
@@ -593,6 +949,20 @@
             elements.showLogin.addEventListener("click", showLoginForm);
             elements.goToLogin.addEventListener("click", showLoginForm);
             
+            // Hamburger menu event listeners
+            elements.hamburgerMenu.addEventListener("click", toggleMenu);
+            elements.menuOverlay.addEventListener("click", closeMenu);
+            elements.closeMenu.addEventListener("click", closeMenu);
+            
+            // NEW: Trading style change event listeners
+            elements.changeStyleBtn.addEventListener("click", toggleStyleOptions);
+            
+            // Style option click listeners
+            const styleOptions = elements.styleOptions.querySelectorAll('.style-option');
+            styleOptions.forEach(option => {
+                option.addEventListener('click', handleStyleChange);
+            });
+            
             // Check if already logged in
             if (localStorage.getItem("loggedIn") === "true") {
                 const userEmail = localStorage.getItem("userEmail");
@@ -600,8 +970,291 @@
                 const userTradingStyle = localStorage.getItem("userTradingStyle");
                 if (userEmail && userName) {
                     showDashboard(userName, userTradingStyle);
+                    updateMenuUserDetails(userName, userEmail, userTradingStyle);
+                    setActiveStyleOption(userTradingStyle);
                 }
             }
+            
+            // Start session update interval
+            updateTradingSession();
+            setInterval(updateTradingSession, 60000); // Update every minute
+        }
+        
+        // Toggle hamburger menu
+        function toggleMenu() {
+            elements.menuContent.classList.toggle("active");
+            elements.menuOverlay.style.display = elements.menuContent.classList.contains("active") ? "block" : "none";
+        }
+        
+        // Close menu
+        function closeMenu() {
+            elements.menuContent.classList.remove("active");
+            elements.menuOverlay.style.display = "none";
+            // Also close style options if open
+            elements.styleOptions.classList.remove("active");
+        }
+        
+        // NEW: Toggle trading style options
+        function toggleStyleOptions() {
+            elements.styleOptions.classList.toggle("active");
+        }
+        
+        // NEW: Handle trading style change
+        function handleStyleChange(event) {
+            const styleElement = event.currentTarget;
+            const newStyle = styleElement.getAttribute('data-style');
+            
+            // Get current user
+            const userEmail = localStorage.getItem("userEmail");
+            if (!userEmail) return;
+            
+            // Update user database
+            if (userDatabase[userEmail]) {
+                userDatabase[userEmail].tradingStyle = newStyle;
+            }
+            
+            // Update localStorage
+            localStorage.setItem("userTradingStyle", newStyle);
+            
+            // Update menu display
+            updateMenuTradingStyle(newStyle);
+            
+            // Update dashboard display
+            updateDashboardTradingStyle(newStyle);
+            
+            // Set active style option
+            setActiveStyleOption(newStyle);
+            
+            // Close style options
+            elements.styleOptions.classList.remove("active");
+            
+            // Show confirmation message
+            alert(`Trading style changed to: ${getStyleDisplayName(newStyle)}`);
+            
+            // Refresh signal with new style
+            generateSignal(newStyle);
+        }
+        
+        // NEW: Set active style option
+        function setActiveStyleOption(style) {
+            const styleOptions = elements.styleOptions.querySelectorAll('.style-option');
+            styleOptions.forEach(option => {
+                option.classList.remove('active');
+                const radioInput = option.querySelector('input');
+                if (radioInput.value === style) {
+                    option.classList.add('active');
+                    radioInput.checked = true;
+                }
+            });
+        }
+        
+        // NEW: Get style display name
+        function getStyleDisplayName(style) {
+            switch(style) {
+                case "scalping":
+                    return "SCALPING (1-15 min timeframe)";
+                case "day":
+                    return "DAY TRADING (1-4 hour timeframe)";
+                case "swing":
+                    return "SWING TRADING (4 hour-daily timeframe)";
+                default:
+                    return style.toUpperCase();
+            }
+        }
+        
+        // NEW: Update menu trading style
+        function updateMenuTradingStyle(style) {
+            elements.menuTradingStyle.textContent = getStyleDisplayName(style);
+        }
+        
+        // NEW: Update dashboard trading style
+        function updateDashboardTradingStyle(style) {
+            elements.userTradingStyleDisplay.textContent = getStyleDisplayName(style);
+        }
+        
+        // Update menu user details
+        function updateMenuUserDetails(name, email, tradingStyle) {
+            elements.menuUserName.textContent = name;
+            elements.menuUserEmail.textContent = email;
+            updateMenuTradingStyle(tradingStyle);
+            
+            // Set member since date
+            const memberSince = localStorage.getItem("memberSince");
+            if (!memberSince) {
+                const today = new Date().toLocaleDateString('en-US', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                localStorage.setItem("memberSince", today);
+                elements.menuMemberSince.textContent = today;
+            } else {
+                elements.menuMemberSince.textContent = memberSince;
+            }
+        }
+        
+        // Update trading session information
+        function updateTradingSession() {
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            
+            // Format time
+            const formattedTime = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            elements.sessionTime.textContent = formattedTime;
+            
+            // Determine trading session (SAST = UTC+2)
+            const isWeekday = day >= 1 && day <= 5;
+            let currentSession = "Market Closed";
+            let sessionType = "CLOSED";
+            let isActive = false;
+            let volatility = "Low";
+            
+            // Market hours in SAST (South Africa Standard Time)
+            // Asian Session: 00:00-09:00 SAST
+            // London Session: 10:00-19:00 SAST (08:00-17:00 UTC)
+            // New York Session: 15:00-00:00 SAST (13:00-22:00 UTC)
+            // Overlap Session: 15:00-19:00 SAST (London + NY overlap)
+            
+            if (isWeekday) {
+                if (hour >= 10 && hour < 19) {
+                    // London Session
+                    currentSession = "London Session";
+                    sessionType = "LONDON";
+                    isActive = true;
+                    
+                    if (hour >= 15 && hour < 19) {
+                        // Overlap with NY Session
+                        volatility = "VERY HIGH";
+                        sessionType = "LONDON/NY OVERLAP";
+                    } else {
+                        volatility = "HIGH";
+                    }
+                } else if (hour >= 15 && hour < 24) {
+                    // New York Session (afternoon/evening in SA)
+                    currentSession = "New York Session";
+                    sessionType = "NEW YORK";
+                    isActive = true;
+                    
+                    if (hour >= 15 && hour < 19) {
+                        // Overlap with London Session
+                        volatility = "VERY HIGH";
+                        sessionType = "LONDON/NY OVERLAP";
+                    } else {
+                        volatility = "HIGH";
+                    }
+                } else if (hour >= 0 && hour < 10) {
+                    // Asian Session (late night/early morning in SA)
+                    currentSession = "Asian Session";
+                    sessionType = "ASIAN";
+                    volatility = "Low";
+                } else if (hour >= 19 && hour < 24) {
+                    // New York Session continues (evening in SA)
+                    currentSession = "New York Session";
+                    sessionType = "NEW YORK";
+                    isActive = true;
+                    volatility = "Medium";
+                }
+            } else {
+                currentSession = "Weekend Session";
+                sessionType = "WEEKEND";
+                volatility = "Very Low";
+            }
+            
+            // Update session display
+            elements.currentSession.textContent = currentSession;
+            elements.sessionType.textContent = sessionType;
+            elements.sessionVolatility.textContent = volatility;
+            elements.sessionStatus.textContent = isActive ? "ACTIVE" : "INACTIVE";
+            
+            // Update session dot
+            elements.sessionDot.className = "session-dot";
+            elements.sessionDot.classList.add(isActive ? "active" : "inactive");
+        }
+        
+        // Update signal confidence in menu
+        function updateSignalConfidence(analysis) {
+            if (!analysis) return;
+            
+            const confidence = Math.round(analysis.confidence * 100);
+            let confidenceText = "";
+            let analysisText = "";
+            
+            if (confidence >= 80) {
+                confidenceText = "VERY HIGH";
+                analysisText = "Strong market signal";
+            } else if (confidence >= 60) {
+                confidenceText = "HIGH";
+                analysisText = "Good trading opportunity";
+            } else if (confidence >= 40) {
+                confidenceText = "MODERATE";
+                analysisText = "Average market conditions";
+            } else if (confidence >= 20) {
+                confidenceText = "LOW";
+                analysisText = "Caution advised";
+            } else {
+                confidenceText = "VERY LOW";
+                analysisText = "Wait for better signal";
+            }
+            
+            elements.confidenceLevel.textContent = `${confidenceText} (${confidence}%)`;
+            elements.confidenceFill.style.width = `${confidence}%`;
+            elements.signalAnalysis.textContent = analysisText;
+        }
+        
+        // Update current signal in menu
+        function updateCurrentSignal(signal) {
+            if (!signal) return;
+            
+            elements.menuCurrentSignal.textContent = `${signal.pair} ${signal.direction}`;
+            
+            // Add to signal history
+            const historyItem = {
+                time: signal.timestamp.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: false}),
+                pair: signal.pair,
+                direction: signal.direction,
+                entry: signal.entry,
+                tp: signal.tp,
+                sl: signal.sl
+            };
+            
+            signalHistory.unshift(historyItem);
+            
+            // Keep only last 10 signals
+            if (signalHistory.length > 10) {
+                signalHistory = signalHistory.slice(0, 10);
+            }
+            
+            // Update history list
+            updateSignalHistory();
+        }
+        
+        // Update signal history display
+        function updateSignalHistory() {
+            elements.signalHistoryList.innerHTML = '';
+            
+            if (signalHistory.length === 0) {
+                elements.signalHistoryList.innerHTML = '<div class="signal-history-item"><div>No signals yet</div></div>';
+                return;
+            }
+            
+            signalHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'signal-history-item';
+                historyItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                        <strong>${item.time}</strong>
+                        <span style="color: ${item.direction === 'BUY' ? '#00ff00' : '#ff0000'}">${item.direction}</span>
+                    </div>
+                    <div style="font-size: 10px;">${item.pair} | Entry: ${item.entry}</div>
+                `;
+                elements.signalHistoryList.appendChild(historyItem);
+            });
         }
         
         // Show registration form
@@ -717,6 +1370,8 @@
             
             // Show dashboard
             showDashboard(user.name, user.tradingStyle);
+            updateMenuUserDetails(user.name, email, user.tradingStyle);
+            setActiveStyleOption(user.tradingStyle);
         }
         
         // Show dashboard
@@ -726,23 +1381,7 @@
             
             // Set username and trading style
             elements.userNameDisplay.textContent = userName.toUpperCase();
-            
-            // Display trading style with proper formatting
-            let tradingStyleText = "";
-            switch(tradingStyle) {
-                case "scalping":
-                    tradingStyleText = "SCALPING (1-15 min timeframe)";
-                    break;
-                case "day":
-                    tradingStyleText = "DAY TRADING (1-4 hour timeframe)";
-                    break;
-                case "swing":
-                    tradingStyleText = "SWING TRADING (4 hour-daily timeframe)";
-                    break;
-                default:
-                    tradingStyleText = tradingStyle.toUpperCase();
-            }
-            elements.userTradingStyleDisplay.textContent = tradingStyleText;
+            updateDashboardTradingStyle(tradingStyle);
             
             // Initialize dashboard
             updateChart(tradingStyle);
@@ -1142,6 +1781,9 @@
             // Analyze market using enhanced algorithm
             const analysis = await analyzeMarket(pair, currentPrice);
             
+            // Update signal confidence in menu
+            updateSignalConfidence(analysis);
+            
             // Get pip size for this pair
             const pipSize = config.pipValues[pair] || 0.0001;
             
@@ -1203,6 +1845,9 @@
                 sl: sl,
                 timestamp: new Date()
             };
+            
+            // Update current signal in menu
+            updateCurrentSignal(signal);
             
             displaySignal(signal);
         }
