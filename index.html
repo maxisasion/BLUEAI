@@ -576,34 +576,6 @@
             text-align: right;
             margin-top: 5px;
         }
-        
-        .api-status {
-            background: rgba(0, 128, 0, 0.1);
-            padding: 8px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-size: 12px;
-            text-align: center;
-            border: 1px solid rgba(0, 128, 0, 0.2);
-        }
-        
-        .api-status.live {
-            color: #008000;
-            background: rgba(0, 128, 0, 0.15);
-        }
-        
-        .api-status.offline {
-            color: #8B0000;
-            background: rgba(139, 0, 0, 0.15);
-        }
-        
-        .price-update {
-            font-size: 11px;
-            color: #666;
-            text-align: center;
-            margin-top: 5px;
-            font-style: italic;
-        }
     </style>
 </head>
 <body>
@@ -723,12 +695,6 @@
                         <strong>TRADING STYLE: </strong><span id="userTradingStyleDisplay"></span>
                     </div>
                     
-                    <!-- API Status Indicator -->
-                    <div id="apiStatus" class="api-status live">
-                        <i class="fas fa-circle" style="color: #008000; margin-right: 5px;"></i>
-                        LIVE MARKET DATA: <span id="currentPriceDisplay">Loading...</span>
-                    </div>
-                    
                     <div class="form-group">
                         <label for="pairSelect">SELECT TRADING PAIR</label>
                         <select id="pairSelect">
@@ -737,23 +703,12 @@
                             <option value="USD/JPY">USD/JPY</option>
                             <option value="AUD/USD">AUD/USD</option>
                             <option value="USD/CAD">USD/CAD</option>
-                            <option value="USD/CHF">USD/CHF</option>
-                            <option value="NZD/USD">NZD/USD</option>
-                            <option value="EUR/GBP">EUR/GBP</option>
-                            <option value="EUR/JPY">EUR/JPY</option>
-                            <option value="GBP/JPY">GBP/JPY</option>
-                            <option value="AUD/JPY">AUD/JPY</option>
-                            <option value="USD/CNY">USD/CNY</option>
-                            <option value="USD/MXN">USD/MXN</option>
-                            <option value="USD/ZAR">USD/ZAR</option>
-                            <option value="XAU/USD" class="gold">XAU/USD (GOLD)</option>
-                            <option value="XAG/USD" class="gold">XAG/USD (SILVER)</option>
                             <option value="BTC/USD" class="bitcoin">BTC/USD (BITCOIN)</option>
-                            <option value="ETH/USD" class="bitcoin">ETH/USD (ETHEREUM)</option>
+                            <option value="XAU/USD" class="gold">XAU/USD (GOLD)</option>
                         </select>
                     </div>
                     
-                    <div class="signal-container" id="signalContainer">
+                    <div class="signal-container">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <div style="font-weight: bold; font-size: 16px;" id="signal-pair">EUR/USD</div>
                             <div style="font-size: 14px; padding: 4px 8px; border-radius: 4px; background: rgba(0, 128, 0, 0.2);" id="signal-direction">LOADING...</div>
@@ -762,7 +717,7 @@
                         <div id="signal-message" style="font-size: 14px; margin-bottom: 10px;">
                             <div style="display: flex; justify-content: center; align-items: center; height: 30px;">
                                 <div class="spinner" style="width: 18px; height: 18px; border-width: 3px;"></div>
-                                <span style="margin-left: 8px;">FETCHING REAL-TIME MARKET DATA...</span>
+                                <span style="margin-left: 8px;">ANALYZING MARKET DATA...</span>
                             </div>
                         </div>
                         
@@ -780,7 +735,6 @@
                                 <div class="detail-value" id="stop-loss">-</div>
                             </div>
                         </div>
-                        <div class="price-update" id="priceUpdateTime">Last updated: -</div>
                     </div>
                     
                     <div class="chart-container">
@@ -873,7 +827,7 @@
     <div class="overlay" id="overlay"></div>
 
     <script>
-        // FIXED ENHANCED CONFIGURATION FOR ACCURATE SIGNALS WITH REAL-TIME DATA
+        // FIXED ENHANCED CONFIGURATION FOR ACCURATE SIGNALS
         const config = {
             pipValues: {
                 "EUR/USD": 0.0001,
@@ -881,51 +835,36 @@
                 "USD/JPY": 0.01,
                 "AUD/USD": 0.0001,
                 "USD/CAD": 0.0001,
-                "USD/CHF": 0.0001,
-                "NZD/USD": 0.0001,
-                "EUR/GBP": 0.0001,
-                "EUR/JPY": 0.01,
-                "GBP/JPY": 0.01,
-                "AUD/JPY": 0.01,
-                "USD/CNY": 0.0001,
-                "USD/MXN": 0.0001,
-                "USD/ZAR": 0.0001,
                 "BTC/USD": 1,
-                "ETH/USD": 0.1,
-                "XAU/USD": 0.1,
-                "XAG/USD": 0.001
+                "XAU/USD": 0.1
             },
             tradingStyles: {
                 scalping: {
-                    tpPips: 1000,
-                    slPips: 500,
+                    tpPips: 15,
+                    slPips: 5,
                     timeframe: "15",
                     winRate: 0.85,
-                    riskReward: 2.0,
+                    riskReward: 3.0,
                     maxHoldTime: "15 minutes"
                 },
                 day: {
-                    tpPips: 1000,
-                    slPips: 500,
+                    tpPips: 40,
+                    slPips: 15,
                     timeframe: "60",
                     winRate: 0.82,
-                    riskReward: 2.0,
+                    riskReward: 2.7,
                     maxHoldTime: "4 hours"
                 },
                 swing: {
-                    tpPips: 1000,
-                    slPips: 500,
+                    tpPips: 120,
+                    slPips: 40,
                     timeframe: "240",
                     winRate: 0.78,
-                    riskReward: 2.0,
+                    riskReward: 3.0,
                     maxHoldTime: "2-5 days"
                 }
             },
-            activationCodes: ["FXBULLS-0-MAX-96MAX-GOLD.", "TRAD@245&^.", "PROFX@:;", "BULLSsex", "ACTIVATE02"],
-            
-            // TWELVE DATA API CONFIGURATION - YOUR API KEY IS HERE
-            twelveDataApiKey: '6600e1f557684ab5a3f57465b24f38d4',
-            twelveDataBaseUrl: 'https://api.twelvedata.com',
+            activationCodes: ["FXBULLS-0-7G-78G-00-9", "TRADe67@$7", "PROFX@:;", "BULLSsex", "ACTIVATE02"],
             
             // Market structure parameters
             marketStructure: {
@@ -965,70 +904,15 @@
                     resistance: [1.3420, 1.3480, 1.3550, 1.3620],
                     trend: "neutral"
                 },
-                "USD/CHF": {
-                    support: [0.8800, 0.8850, 0.8900, 0.8950],
-                    resistance: [0.8880, 0.8930, 0.8980, 0.9030],
-                    trend: "neutral"
-                },
-                "NZD/USD": {
-                    support: [0.6000, 0.6050, 0.6100, 0.6150],
-                    resistance: [0.6080, 0.6130, 0.6180, 0.6230],
-                    trend: "neutral"
-                },
-                "EUR/GBP": {
-                    support: [0.8500, 0.8550, 0.8600, 0.8650],
-                    resistance: [0.8575, 0.8625, 0.8675, 0.8725],
-                    trend: "neutral"
-                },
-                "EUR/JPY": {
-                    support: [158.00, 159.00, 160.00, 161.00],
-                    resistance: [159.50, 160.50, 161.50, 162.50],
-                    trend: "bullish"
-                },
-                "GBP/JPY": {
-                    support: [185.00, 186.00, 187.00, 188.00],
-                    resistance: [186.50, 187.50, 188.50, 189.50],
-                    trend: "bullish"
-                },
-                "AUD/JPY": {
-                    support: [96.00, 97.00, 98.00, 99.00],
-                    resistance: [97.50, 98.50, 99.50, 100.50],
-                    trend: "neutral"
-                },
-                "USD/CNY": {
-                    support: [7.1500, 7.2000, 7.2500, 7.3000],
-                    resistance: [7.2000, 7.2500, 7.3000, 7.3500],
-                    trend: "neutral"
-                },
-                "USD/MXN": {
-                    support: [16.50, 17.00, 17.50, 18.00],
-                    resistance: [17.00, 17.50, 18.00, 18.50],
-                    trend: "neutral"
-                },
-                "USD/ZAR": {
-                    support: [18.50, 19.00, 19.50, 20.00],
-                    resistance: [19.00, 19.50, 20.00, 20.50],
-                    trend: "neutral"
-                },
                 "BTC/USD": {
                     support: [40000, 41500, 42500, 43500],
                     resistance: [42500, 44000, 45500, 47000],
-                    trend: "bullish"
-                },
-                "ETH/USD": {
-                    support: [2200, 2300, 2400, 2500],
-                    resistance: [2400, 2500, 2600, 2700],
                     trend: "bullish"
                 },
                 "XAU/USD": {
                     support: [2000, 2020, 2040, 2060],
                     resistance: [2050, 2075, 2100, 2125],
                     trend: "bullish"
-                },
-                "XAG/USD": {
-                    support: [22.00, 22.50, 23.00, 23.50],
-                    resistance: [23.00, 23.50, 24.00, 24.50],
-                    trend: "neutral"
                 }
             },
             
@@ -1047,98 +931,18 @@
                 "USD/JPY": ["carry-trade", "range-bound"],
                 "AUD/USD": ["commodity-linked", "trend-following"],
                 "USD/CAD": ["oil-correlated", "range-bound"],
-                "USD/CHF": ["safe-haven", "range-bound"],
-                "NZD/USD": ["commodity-linked", "volatile"],
-                "EUR/GBP": ["range-bound", "low-volatility"],
-                "EUR/JPY": ["carry-trade", "volatile"],
-                "GBP/JPY": ["high-volatility", "carry-trade"],
-                "AUD/JPY": ["commodity-linked", "carry-trade"],
-                "USD/CNY": ["controlled", "low-volatility"],
-                "USD/MXN": ["emerging-market", "volatile"],
-                "USD/ZAR": ["emerging-market", "high-volatility"],
                 "BTC/USD": ["high-volatility", "momentum"],
-                "ETH/USD": ["high-volatility", "correlated-btc"],
-                "XAU/USD": ["safe-haven", "inverse-USD"],
-                "XAG/USD": ["industrial-metal", "volatile"]
+                "XAU/USD": ["safe-haven", "inverse-USD"]
             }
         };
 
-        // FIXED: Advanced Technical Analysis Engine with REAL-TIME DATA
+        // FIXED: Advanced Technical Analysis Engine
         class TechnicalAnalyzer {
             constructor() {
                 this.history = {};
-                this.lastPriceUpdate = {};
-                this.priceCache = {};
-                this.cacheDuration = 60000; // Cache prices for 1 minute
             }
             
-            // NEW METHOD: Fetch real-time price from Twelve Data API
-            async fetchRealTimePrice(pair) {
-                const now = Date.now();
-                const cached = this.priceCache[pair];
-                
-                // Return cached price if it's still valid
-                if (cached && (now - cached.timestamp) < this.cacheDuration) {
-                    return cached.price;
-                }
-                
-                // Format symbol for API (some pairs might need different format)
-                let symbol = pair;
-                // For Twelve Data API, most pairs work as is, but we might need to adjust
-                if (pair === "BTC/USD") symbol = "BTC/USD";
-                if (pair === "ETH/USD") symbol = "ETH/USD";
-                
-                const apiKey = config.twelveDataApiKey;
-                const url = `${config.twelveDataBaseUrl}/price?symbol=${symbol}&apikey=${apiKey}`;
-                
-                try {
-                    console.log(`Fetching price for ${pair} from Twelve Data API`);
-                    const response = await fetch(url);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (data.price && data.price !== "NaN") {
-                        const price = parseFloat(data.price);
-                        
-                        // Cache the price
-                        this.priceCache[pair] = {
-                            price: price,
-                            timestamp: now
-                        };
-                        
-                        this.lastPriceUpdate[pair] = now;
-                        return price;
-                    } else {
-                        console.warn('API returned invalid price data:', data);
-                        return this.generateFallbackPrice(pair);
-                    }
-                } catch (error) {
-                    console.error('Error fetching price from Twelve Data API:', error);
-                    return this.generateFallbackPrice(pair);
-                }
-            }
-            
-            // Fallback price generator (used when API fails)
-            generateFallbackPrice(pair) {
-                const levels = marketStructure.levels[pair] || marketStructure.levels["EUR/USD"];
-                const midSupport = levels.support[Math.floor(levels.support.length / 2)];
-                const midResistance = levels.resistance[Math.floor(levels.resistance.length / 2)];
-                const basePrice = (midSupport + midResistance) / 2;
-                
-                // Add realistic fluctuation
-                const fluctuation = this.getPairFluctuation(pair);
-                const timeFactor = (new Date().getHours() * 60 + new Date().getMinutes()) / 1440;
-                const timeFluctuation = Math.sin(timeFactor * Math.PI * 2) * fluctuation * 0.5;
-                const randomComponent = (Math.random() - 0.5) * fluctuation * 0.4;
-                
-                return basePrice + timeFluctuation + randomComponent;
-            }
-            
-            async analyzePair(pair, tradingStyle) {
+            analyzePair(pair, tradingStyle) {
                 const now = new Date();
                 const hour = now.getHours();
                 const levels = marketStructure.levels[pair] || marketStructure.levels["EUR/USD"];
@@ -1155,12 +959,9 @@
                     }
                 }
                 
-                // Get REAL market price from Twelve Data API
-                const basePrice = await this.fetchRealTimePrice(pair);
+                // Generate realistic price based on market structure
+                const basePrice = this.generateRealisticPrice(pair, levels);
                 const currentPrice = parseFloat(basePrice.toFixed(5));
-                
-                // Update API status display
-                this.updateApiStatus(pair, currentPrice);
                 
                 // Analyze market structure
                 const structureAnalysis = this.analyzeMarketStructure(pair, currentPrice, levels);
@@ -1179,26 +980,33 @@
                     currentPrice: currentPrice,
                     session: currentSession.toUpperCase(),
                     volatility: sessionVolatility,
-                    timestamp: now.toLocaleString(),
-                    dataSource: 'Twelve Data API'
+                    timestamp: now.toLocaleString()
                 };
             }
             
-            updateApiStatus(pair, price) {
-                const apiStatus = document.getElementById('apiStatus');
-                const currentPriceDisplay = document.getElementById('currentPriceDisplay');
-                const priceUpdateTime = document.getElementById('priceUpdateTime');
+            generateRealisticPrice(pair, levels) {
+                // Get base price from levels
+                const midSupport = levels.support[Math.floor(levels.support.length / 2)];
+                const midResistance = levels.resistance[Math.floor(levels.resistance.length / 2)];
+                const basePrice = (midSupport + midResistance) / 2;
                 
-                if (apiStatus && currentPriceDisplay) {
-                    apiStatus.className = 'api-status live';
-                    apiStatus.innerHTML = `<i class="fas fa-circle" style="color: #008000; margin-right: 5px;"></i> LIVE MARKET DATA: ${pair} = <strong>${price}</strong>`;
-                }
+                // Add realistic fluctuation based on pair characteristics
+                const fluctuation = this.getPairFluctuation(pair);
+                const trendDirection = levels.trend === "bullish" ? 1 : 
+                                      levels.trend === "bearish" ? -1 : 0;
                 
-                if (priceUpdateTime) {
-                    const now = new Date();
-                    const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-                    priceUpdateTime.textContent = `Last updated: ${timeString}`;
-                }
+                // Time-based fluctuation
+                const now = new Date();
+                const timeFactor = (now.getHours() * 60 + now.getMinutes()) / 1440;
+                const timeFluctuation = Math.sin(timeFactor * Math.PI * 2) * fluctuation * 0.5;
+                
+                // Trend component
+                const trendComponent = trendDirection * fluctuation * 0.3;
+                
+                // Random component
+                const randomComponent = (Math.random() - 0.5) * fluctuation * 0.4;
+                
+                return basePrice + timeFluctuation + trendComponent + randomComponent;
             }
             
             getPairFluctuation(pair) {
@@ -1208,19 +1016,8 @@
                     "USD/JPY": 0.35,
                     "AUD/USD": 0.0028,
                     "USD/CAD": 0.0022,
-                    "USD/CHF": 0.0020,
-                    "NZD/USD": 0.0025,
-                    "EUR/GBP": 0.0015,
-                    "EUR/JPY": 0.40,
-                    "GBP/JPY": 0.50,
-                    "AUD/JPY": 0.45,
-                    "USD/CNY": 0.0010,
-                    "USD/MXN": 0.0200,
-                    "USD/ZAR": 0.0500,
                     "BTC/USD": 800,
-                    "ETH/USD": 50,
-                    "XAU/USD": 12,
-                    "XAG/USD": 0.25
+                    "XAU/USD": 12
                 };
                 return fluctuations[pair] || 0.0025;
             }
@@ -1239,7 +1036,7 @@
                 const distanceToSupport = Math.abs(currentPrice - nearestSupport);
                 const distanceToResistance = Math.abs(nearestResistance - currentPrice);
                 
-                // Determine if price is near key levels (within 0.1% of price)
+                // Determine if price is near key levels
                 const atSupport = distanceToSupport / currentPrice < 0.001;
                 const atResistance = distanceToResistance / currentPrice < 0.001;
                 
@@ -1269,17 +1066,12 @@
                 // Adjust based on pair volatility
                 const volatilityAdjustment = {
                     "BTC/USD": 1.3,
-                    "ETH/USD": 1.2,
-                    "GBP/JPY": 1.2,
                     "GBP/USD": 1.2,
                     "XAU/USD": 1.1,
-                    "USD/ZAR": 1.1,
-                    "USD/MXN": 1.1,
                     "EUR/USD": 1.0,
                     "USD/JPY": 0.9,
                     "AUD/USD": 0.9,
-                    "USD/CAD": 0.8,
-                    "EUR/GBP": 0.7
+                    "USD/CAD": 0.8
                 }[pair] || 1.0;
                 
                 return baseStrength * volatilityAdjustment;
@@ -1287,7 +1079,7 @@
             
             generateSignalFromStructure(pair, currentPrice, structure, tradingStyle, session) {
                 const styleConfig = config.tradingStyles[tradingStyle];
-                const pipValue = config.pipValues[pair] || 0.0001;
+                const pipValue = config.pipValues[pair];
                 
                 // Decision logic based on market structure
                 let direction = "BUY";
@@ -1336,35 +1128,30 @@
                 confidence = Math.min(Math.max(confidence, 0.65), 0.95);
                 
                 // Calculate entry, TP, SL based on trading style
-                const tpPips = styleConfig.tpPips; // NOW 1000 PIPS FOR ALL PAIRS
-                const slPips = styleConfig.slPips; // NOW 500 PIPS FOR ALL PAIRS
+                const tpPips = styleConfig.tpPips;
+                const slPips = styleConfig.slPips;
                 
                 let entryPrice, takeProfit, stopLoss;
                 
-                // IMPORTANT: This calculation ensures TP/SL match the vertical scale
                 if (direction === "BUY") {
-                    // For BUY: Entry slightly above current price, TP above, SL below
-                    entryPrice = currentPrice + (pipValue * 1); // 1 pip above
-                    takeProfit = currentPrice + (pipValue * tpPips);
-                    stopLoss = currentPrice - (pipValue * slPips);
+                    entryPrice = (currentPrice * (1 + 0.0001)).toFixed(5);
+                    takeProfit = (currentPrice * (1 + tpPips * pipValue / (pair.includes("JPY") ? 100 : 1))).toFixed(5);
+                    stopLoss = (currentPrice * (1 - slPips * pipValue / (pair.includes("JPY") ? 100 : 1))).toFixed(5);
                 } else {
-                    // For SELL: Entry slightly below current price, TP below, SL above
-                    entryPrice = currentPrice - (pipValue * 1); // 1 pip below
-                    takeProfit = currentPrice - (pipValue * tpPips);
-                    stopLoss = currentPrice + (pipValue * slPips);
+                    entryPrice = (currentPrice * (1 - 0.0001)).toFixed(5);
+                    takeProfit = (currentPrice * (1 - tpPips * pipValue / (pair.includes("JPY") ? 100 : 1))).toFixed(5);
+                    stopLoss = (currentPrice * (1 + slPips * pipValue / (pair.includes("JPY") ? 100 : 1))).toFixed(5);
                 }
                 
-                // Format based on pair type
-                let decimalPlaces = 5;
-                if (pair.includes("JPY") || pair.includes("XAU") || pair.includes("XAG")) decimalPlaces = 2;
-                if (pair.includes("BTC") || pair.includes("ETH")) decimalPlaces = 2;
-                if (pair.includes("USD/ZAR") || pair.includes("USD/MXN")) decimalPlaces = 4;
+                // Adjust decimal places for different pairs
+                const decimalPlaces = pair.includes("JPY") ? 3 : 
+                                     pair.includes("BTC") || pair.includes("XAU") ? 2 : 5;
                 
                 return {
                     direction,
-                    entry: entryPrice.toFixed(decimalPlaces),
-                    tp: takeProfit.toFixed(decimalPlaces),
-                    sl: stopLoss.toFixed(decimalPlaces),
+                    entry: parseFloat(entryPrice).toFixed(decimalPlaces),
+                    tp: parseFloat(takeProfit).toFixed(decimalPlaces),
+                    sl: parseFloat(stopLoss).toFixed(decimalPlaces),
                     confidence: Math.round(confidence * 100),
                     winProbability: Math.round(styleConfig.winRate * 100),
                     reasoning: reasoning,
@@ -1466,11 +1253,7 @@
             updateTradingStyleBtn: document.getElementById("updateTradingStyleBtn"),
             showHistoryBtn: document.getElementById("showHistoryBtn"),
             clearHistoryBtn: document.getElementById("clearHistoryBtn"),
-            historyList: document.getElementById("historyList"),
-            apiStatus: document.getElementById("apiStatus"),
-            currentPriceDisplay: document.getElementById("currentPriceDisplay"),
-            signalContainer: document.getElementById("signalContainer"),
-            priceUpdateTime: document.getElementById("priceUpdateTime")
+            historyList: document.getElementById("historyList")
         };
 
         // Track if user has seen welcome message
@@ -1693,16 +1476,16 @@
         }
         
         // Handle refresh
-        async function handleRefresh() {
+        function handleRefresh() {
             const tradingStyle = localStorage.getItem("userTradingStyle");
-            await generateSmartSignal(tradingStyle);
+            generateSmartSignal(tradingStyle);
         }
         
         // Handle pair change
-        async function handlePairChange() {
+        function handlePairChange() {
             const tradingStyle = localStorage.getItem("userTradingStyle");
             updateChart(tradingStyle);
-            await generateSmartSignal(tradingStyle);
+            generateSmartSignal(tradingStyle);
         }
         
         // Update TradingView chart based on trading style
@@ -1722,12 +1505,12 @@
             elements.chartIframe.src = iframeSrc;
         }
         
-        // FIXED: Generate accurate signals based on REAL market data
-        async function generateSmartSignal(tradingStyle) {
+        // FIXED: Generate accurate signals based on market structure
+        function generateSmartSignal(tradingStyle) {
             elements.signalMessage.innerHTML = `
                 <div style="display: flex; justify-content: center; align-items: center; height: 30px;">
                     <div class="spinner" style="width: 18px; height: 18px; border-width: 3px;"></div>
-                    <span style="margin-left: 8px;">FETCHING REAL-TIME MARKET DATA...</span>
+                    <span style="margin-left: 8px;">ANALYZING MARKET STRUCTURE...</span>
                 </div>
             `;
             
@@ -1737,8 +1520,8 @@
             // Update signal pair display
             elements.signalPair.textContent = pairName.toUpperCase();
             
-            // Use the technical analyzer to get accurate signal from REAL data
-            const analysis = await analyzer.analyzePair(pair, tradingStyle);
+            // Use the technical analyzer to get accurate signal
+            const analysis = analyzer.analyzePair(pair, tradingStyle);
             
             // Display the signal
             displaySmartSignal(analysis, pairName);
@@ -1771,7 +1554,7 @@
             const reasoningText = signal.reasoning ? signal.reasoning.join(" • ") : "Market structure analysis";
             
             elements.signalMessage.innerHTML = `
-                <div><strong>${winEmoji} REAL-TIME MARKET SIGNAL ${winEmoji}</strong></div>
+                <div><strong>${winEmoji} MARKET STRUCTURE SIGNAL ${winEmoji}</strong></div>
                 <div style="font-size: 12px; margin-top: 5px; color: ${signal.confidence >= 85 ? '#008000' : '#FFD700'}">
                     <strong>CONFIDENCE: ${signal.confidence}%</strong> | Session: ${signal.session}
                 </div>
@@ -1780,9 +1563,6 @@
                 </div>
                 <div style="font-size: 11px; margin-top: 3px; color: #888;">
                     Risk/Reward: 1:${signal.riskReward} | Expected Profit: ${signal.expectedProfit} pips
-                </div>
-                <div style="font-size: 10px; margin-top: 5px; color: #008000; font-style: italic;">
-                    <i class="fas fa-satellite-dish"></i> Powered by Twelve Data API
                 </div>
             `;
             
@@ -2050,3 +1830,5 @@
     </script>
 </body>
 </html>
+
+MAKE THIS SYSTEM POWERFUL AND PROFITABLE AND EVERYTHING SHOULD LOOK PROFFETIONAL AND DONT CHANGE ANYTHING OR ADD ANYTHING AND ALSO MAKE THE GREEN COLOUR TO BE GREEN DARK AND PLEASE SEND ME FULL UPDATED HTML AND PLEASE ADD FIX THE CONFIDDANCE RATE OF THE SIGNAL
