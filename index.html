@@ -1282,14 +1282,6 @@
             // Start session update interval
             updateTradingSession();
             setInterval(updateTradingSession, 1000); // Update every second for clock
-            
-            // Start market data refresh interval
-            setInterval(() => {
-                if (localStorage.getItem("loggedIn") === "true") {
-                    const tradingStyle = localStorage.getItem("userTradingStyle");
-                    generateSignal(tradingStyle);
-                }
-            }, 60000); // Refresh every minute
         }
         
         // Toggle hamburger menu
